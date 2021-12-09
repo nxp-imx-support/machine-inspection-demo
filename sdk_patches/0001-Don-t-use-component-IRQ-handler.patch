@@ -1,0 +1,18 @@
+--- components/uart/fsl_adapter_lpuart.c_old	2021-12-15 13:36:32.155344051 +0100
++++ components/uart/fsl_adapter_lpuart.c	2021-12-15 13:36:52.379754885 +0100
+@@ -1155,6 +1155,7 @@ void LPUART2_RX_IRQHandler(void)
+     SDK_ISR_EXIT_BARRIER;
+ }
+ #else
++#if 0
+ void LPUART2_IRQHandler(void);
+ void LPUART2_IRQHandler(void)
+ {
+@@ -1162,6 +1163,7 @@ void LPUART2_IRQHandler(void)
+     SDK_ISR_EXIT_BARRIER;
+ }
+ #endif
++#endif
+ #endif /* LPUART2 */
+ 
+ #if defined(LPUART3)

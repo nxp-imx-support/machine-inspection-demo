@@ -1,0 +1,20 @@
+--- boards/src/demo_apps/avb_tsn/tsn_app/configs.c	2021-12-15 13:57:59.585138480 +0100
++++ boards/src/demo_apps/avb_tsn/tsn_app/configs.c	2021-12-15 13:59:42.775003897 +0100
+@@ -33,14 +33,14 @@ struct system_config system_cfg = {
+     },
+     .app = {
+         .tsn_app_config = {
+-            .mode = NETWORK_ONLY,
+-            .role = CONTROLLER_0,
++            .mode = SERIAL,
++            .role = IO_DEVICE_0,
+             .num_io_devices = CONTROLLER_NUM_IO_DEVICES,
+             .control_strategy = SYNCHRONIZED,
+             .use_st = 1,
+             .use_fp = 0,
+             .cmd_client = 0,
+-            .period_ns = APP_PERIOD_DEFAULT,
++            .period_ns = APP_PERIOD_SERIAL_DEFAULT,
+         },
+     },
+ };

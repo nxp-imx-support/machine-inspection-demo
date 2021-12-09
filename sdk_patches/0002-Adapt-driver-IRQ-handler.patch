@@ -1,0 +1,29 @@
+--- devices/MIMXRT1176/drivers/fsl_lpuart.c	2021-12-15 13:37:40.020691152 +0100
++++ devices/MIMXRT1176/drivers/fsl_lpuart.c	2021-12-15 13:39:12.810400224 +0100
+@@ -1401,7 +1401,7 @@ status_t LPUART_TransferReceiveNonBlocki
+              * read-modify-wrte. */
+             irqMask = DisableGlobalIRQ();
+             /* Disable LPUART RX IRQ, protect ring buffer. */
+-            base->CTRL &= ~(uint32_t)(LPUART_CTRL_RIE_MASK | LPUART_CTRL_ORIE_MASK);
++            base->CTRL &= ~(uint32_t)(LPUART_CTRL_RIE_MASK | LPUART_CTRL_ILIE_MASK | LPUART_CTRL_ORIE_MASK);
+             EnableGlobalIRQ(irqMask);
+ 
+             /* How many bytes in RX ring buffer currently. */
+@@ -1445,7 +1445,7 @@ status_t LPUART_TransferReceiveNonBlocki
+              * read-modify-wrte. */
+             irqMask = DisableGlobalIRQ();
+             /* Re-enable LPUART RX IRQ. */
+-            base->CTRL |= (uint32_t)(LPUART_CTRL_RIE_MASK | LPUART_CTRL_ORIE_MASK);
++            base->CTRL |= (uint32_t)(LPUART_CTRL_RIE_MASK | LPUART_CTRL_ILIE_MASK | LPUART_CTRL_ORIE_MASK);
+             EnableGlobalIRQ(irqMask);
+ 
+             /* Call user callback since all data are received. */
+@@ -1621,7 +1621,7 @@ void LPUART_TransferHandleIRQ(LPUART_Typ
+             EnableGlobalIRQ(irqMask);
+         }
+         /* Invoke callback if callback is not NULL and rxDataSize is not 0. */
+-        else if (NULL != handle->callback)
++        if (NULL != handle->callback)
+         {
+             handle->callback(base, handle, kStatus_LPUART_IdleLineDetected, handle->userData);
+         }

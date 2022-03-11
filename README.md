@@ -17,9 +17,9 @@ For full detaile description of the hardware and software setup, please refer to
  - i.MX RT1170 EVK and the robot arm
 
 ### Software
- - Real Time Edge 2.1 yocto release and the additional meta-machine-inspection-demo Yocto meta-layer located in this repository
- - GenAVB/TSN MCUXpresso SDK version 4.0.3 and the apps_patches located in this repository
- - MCUXpresso SDK version 2.10.0 and the sdk_patches located in this repository
+ - Real Time Edge 2.2 yocto release and the additional meta-machine-inspection-demo Yocto meta-layer located in this repository
+ - GenAVB/TSN MCUXpresso SDK version 4.3.0 and the apps_patches located in this repository
+ - MCUXpresso SDK version 2.11.0 and the sdk_patches located in this repository
 
 ## Build instructions
 For full build instructions, please refer to the _Machine Inspection Demo_ application note.
@@ -33,13 +33,13 @@ The following section describes the build process,
 ```
  - First, we need to get the machine inspection meta-layer from codeaurora:
 ```
- git clone ssh://git@bitbucket.sw.nxp.com/micrse/machine-inspection-demo.git
+ git clone https://source.codeaurora.org/external/imxsupport/machine-inspection-demo.git
 ```
- - Then, we need to initialize the Yocto build based on the Real Time Edge v2.1 Yocto release:
+ - Then, we need to initialize the Yocto build based on the Real Time Edge v2.2 Yocto release:
 ```
  mkdir yocto-real-time-edge
  cd yocto-real-time-edge
- repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-hardknott -m real-time-edge-2.1.0.xml
+ repo init -u https://github.com/real-time-edge-sw/yocto-real-time-edge.git -b real-time-edge-hardknott -m real-time-edge-2.2.0.xml
  repo sync
 ```
  - Before launching the build, we need to copy the machine inspection meta-layer into the source folder of the Yocto build:
@@ -59,32 +59,32 @@ The following section describes the build process,
 ```
 
 ### RT1170 build
-The image running on the i.MX RT 1170 EVK is based on the GenAVB/TSN MCUXpresso SDK version 4.0.3 and the MCUXpresso SDK version 2.10.0. The GenAVB release under the name “AVB/TSN stacks for supported i.MX RT crossover MCUs” can be download from https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/wired-communications-middleware-for-nxp-microcontrollers:WIRED-COMM-MIDDLEWARE?tab=Design_Tools_Tab and the MCUXpresso SDK from https://mcuxpresso.nxp.com/.
+The image running on the i.MX RT 1170 EVK is based on the GenAVB/TSN MCUXpresso SDK version 4.3.0 and the MCUXpresso SDK version 2.11.0. The GenAVB release under the name “AVB/TSN stacks for supported i.MX RT crossover MCUs” can be download from https://www.nxp.com/design/software/development-software/mcuxpresso-software-and-tools-/wired-communications-middleware-for-nxp-microcontrollers:WIRED-COMM-MIDDLEWARE?tab=Design_Tools_Tab and the MCUXpresso SDK from https://mcuxpresso.nxp.com/.
 
-The NXP GenAVB/TSN MCUXpresso User’s Guide under genavb_tsn-mcuxpresso-SDK_2_10_0-4_0_3/doc/ describes the needed MCU Xpresso configuration, how to setup the build environment and how to build the i.MX RT1170 TSN example application.
+The NXP GenAVB/TSN MCUXpresso User’s Guide under genavb_tsn-mcuxpresso-SDK_2_11_0-4_3_0/doc/ describes the needed MCU Xpresso configuration, how to setup the build environment and how to build the i.MX RT1170 TSN example application.
 
 - In addition to the patches for GenAVB, we need to add additional patches to the MCUXpresso SDK for the machine inspection demo:
 ```
- cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_10_0-4_0_3/SDK_2_10_0_MIMXRT1170-EVK/
+ cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_11_0-4_3_0/SDK_2_11_0_MIMXRT1170-EVK/
  cp <path-to-machine-inspection-demo>/sdk_patches/000* .
  patch -p0 < 0001-Don-t-use-component-IRQ-handler.patch
  patch -p0 < 0002-Adapt-driver-IRQ-handler.patch
 ```
  - The default configuration for the TSN application also needs to be changed: 
 ```
- cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_10_0-4_0_3/genavb-apps-freertos-4_0_3/
+ cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_11_0-4_3_0/genavb-apps-freertos-4_3_0/
  cp <path-to-machine-inspection-demo>/apps_patches/000* .
  patch -p0 < 0001-Change-default-config-to-serial-mode.patch
 ```
  - Please notice that an additional patch is needed if you are using i.MX RT1170 EVK Rev B:
 ```
- cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_10_0-4_0_3/genavb-apps-freertos-4_0_3/
+ cd <patch-to-GenAVB-release>/genavb_tsn-mcuxpresso-SDK_2_11_0-4_3_0/genavb-apps-freertos-4_3_0/
  cp <path-to-machine-inspection-demo>/apps_patches/000* .
  patch -p0 < 0002-apps-Select-Rev-B-board.patch
 ```
 
 ### LS1028ARB build
-The image running on the LS1028 is the official Real Time Edge 2.1 release. It can be download from the NXP website https://www.nxp.com/design/software/development-software/real-time-edge-software:REALTIME-EDGE-SOFTWARE or built following the Real-time Edge Yocto Project User Guide.
+The image running on the LS1028 is the official Real Time Edge 2.2 release. It can be download from the NXP website https://www.nxp.com/design/software/development-software/real-time-edge-software:REALTIME-EDGE-SOFTWARE or built following the Real-time Edge Yocto Project User Guide.
 
 ## Running the application
 For detailed instructions on how to run the demo, please refer to the _Machine Inspection Demo_ application note.

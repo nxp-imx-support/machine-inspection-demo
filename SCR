@@ -1,0 +1,101 @@
+NXP Software Content Register
+
+Release Name:           IMX Machine Inspection Demo
+Version:                1.0
+Date Created:           February-2022
+Release Location:       https://source.codeaurora.org/external/imxsupport/machine-inspection-demo
+Description:            Patches and meta-layer for i.MX Machine Inspection Demo
+
+Package:                        apps_patches
+Outgoing License:               Open Source - BSD-3-Clause
+License File:                   LICENSE.BSD
+Package Category:               GenAVB/TSN example application
+Description and comments:       Patches for example applications using the GenAVB/TSN stack API
+Type of content:                Source code
+Origin:                         NXP (BSD-3-Clause)
+
+Package:                        sdk_patches
+Outgoing License:               Open Source - BSD-3-Clause
+License File:                   LICENSE.BSD
+Package Category:               Peripheral drivers
+Description and comments:       Patches for SDK peripheral drivers
+Type of content:                Source code
+Origin:                         NXP (BSD-3-Clause)
+
+Package:                        isp-imx
+Outgoing License:               LA_OPT_NXP_Software_License v30 October 2021 - Additional distribution license granted - Section 2.3 applies
+License File:                   LICENSE.EULA
+Package Category:               Graphics
+Type of Content:                Source code
+Description and comments:       i.MX software ISP
+Origin:                         VeriSilicon Holdings Co., Ltd. (proprietary)
+
+Package:                         uboot-imx
+Version:                         2021.04
+Outgoing License:                GPL-2.0
+License File:                    Licenses/gpl-2.0.txt
+Package Category:                BSP
+Type of Content:                 source 
+Description and comments:        Bootloader with i.MX-specific capabilities
+Release Location:                https://source.codeaurora.org/external/imx/uboot-imx -b rel_imx_5.10.72-2.2.0
+Origin:                          NXP (GPL-2.0)
+                                 Das U-Boot - Universal Bootloader (GPL-2.0) - http://www.denx.de/wiki/U-Boot/WebHome
+                                 Android Open Source Project (BSD-2-Clause) - https://source.android.com/
+                                 zlib (zlib license) - http://www.zlib.net/
+
+Package:                        dropbear
+Outgoing License:               MIT
+License File:                   LICENSE.dropbear
+Package Category:               Console
+Type of Content:                Source code
+Description and comments:       A lightweight SSH and SCP implementation
+Origin:                         https://matt.ucc.asn.au/dropbear/dropbear.html
+
+Package:                         genavb-tsn
+Outgoing License:                nxp/EULA.txt, GPL-2.0, BSD-3-Clause
+License Files:                   LICENSE.EULA, LICENSE.COPYING, LICENSE.BSD
+Package Category:                Real-time Networking
+Type of content:                 Source code
+Description and comments:        GenAVB/TSN Stack
+Release Location:                https://github.com/NXP/GenAVB_TSN.git
+Origin:                          NXP (nxp/EULA.txt, GPL-2.0, BSD-3-Clause)
+
+Package:                         machine-inspection
+Outgoing License:                nxp/EULA.txt, GPL-2.0, BSD-3-Clause, Apache-2.0
+License Files:                   LICENSE.EULA, LICENSE.COPYING, LICENSE.BSD, LICENSE.APACHE
+Package Category:                Real-time Networking
+Type of content:                 Source code
+Description and comments:        GenAVB/TSN Stack
+Release Location:                https://github.com/NXP/GenAVB_TSN.git
+Origin:                          NXP (nxp/EULA.txt, GPL-2.0, BSD-3-Clause, Apache-2.0)
+
+Package:                         tf1-detection-zoo
+Outgoing License:                Apache-2.0
+License Files:                   LICENSE.APACHE
+Package Category:                Machine Learning
+Type of content:                 Binary and Source code
+Description and comments:        Tensorflow model for object detection and labels
+Origin:                          TensorFlow
+
+Package:                         uarm-python-sdk
+Outgoing License:                BSD-3-Clause
+License Files:                   LICENSE.BSD
+Package Category:                uARM SDK
+Type of content:                 Source code
+Description and comments:        SDK to control uARM SwfitPro
+Origin:                          uARM-Developer
+
+Package:                         opencv-imx
+Outgoing License:                BSD-3-Clause 
+License File:                    LICENSE.BSD
+Package Category:                Graphics
+Type of Content:                 source
+Description and comments:        i.MX OpenCV
+Release Location:                https://source.codeaurora.org/external/imx/opencv-imx -b rel_imx_5.4.24_2.1.0
+Origin:                          NXP (BSD-3-Cluse)
+                                 OpenCV Foundation (BSD-3-Clause) - https://github.com/opencv/opencv
+                                 Intel Corporation  (BSD-3-Clause)
+                                 Willow Garage Inc.  (BSD-3-Clause)
+                                 NVIDIA Corporation  (BSD-3-Clause)
+                                 Advanced Micro Devices, Inc.  (BSD-3-Clause)
+                                 Itseez Inc.  (BSD-3-Clause)

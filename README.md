@@ -7,6 +7,9 @@ This demonstration uses the GenAVB software stack to control a robot arm on a TS
 ## License
  - License BSD-3-Clause
  - License GPL-2.0
+ - License Apache-2.0
+ - License MIT
+ - License NXP-EULA
 
 ## Hardware and software setup
 For full detaile description of the hardware and software setup, please refer to the _Machine Inspection Demo_ application note.

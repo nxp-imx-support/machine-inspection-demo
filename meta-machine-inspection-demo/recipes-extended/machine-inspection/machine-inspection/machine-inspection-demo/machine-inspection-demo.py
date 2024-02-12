@@ -2,7 +2,7 @@
 #
 # Copyright 2019 The TensorFlow Authors. All Rights Reserved.
 #
-# Copyright 2022 NXP
+# Copyright 2022, 2024 NXP
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -100,14 +100,10 @@ def detect_objects(interpreter, image, threshold):
     count = int(get_output_tensor(interpreter, 3))
 
     results = []
-#    print("New scores - threshold: {}".format(threshold))
     for i in range(count):
-#        print("Score {}: {}".format(i, scores[i]))
         if scores[i] >= threshold:
             result = {'bounding_box': boxes[i], 'class_id': classes[i], 'score': scores[i]}
-#            print("class: {}, score: {}".format(classes[i], scores[i]))
             results.append(result)
-#    print("Results: {}".format(results))
     return results
 
 
@@ -156,7 +152,6 @@ class Fruit(object):
 
 
 class Robot(threading.Thread):
-#    def __init__(self, fruits, filters):
     def __init__(self, fruits, port):
         threading.Thread.__init__(self, name="robot")
         self.daemon = True
@@ -174,8 +169,6 @@ class Robot(threading.Thread):
         self.robot_data = []
         self.fruits = fruits
 
-#        self.swift = SwiftAPI(filters=filters)
-#        self.swift = SwiftAPI(filters=filters, cmd_pending_size=8, callback_thread_pool_size=8, enable_write_thread=True)
         self.swift = SwiftAPI(port=port, cmd_pending_size=8, callback_thread_pool_size=8, enable_write_thread=True)
 
         self.swift.waiting_ready(timeout=3)
@@ -185,7 +178,6 @@ class Robot(threading.Thread):
         firmware_version = device_info['firmware_version']
         if firmware_version and not firmware_version.startswith(('0.', '1.', '2.', '3.')):
             self.swift.set_speed_factor(1)
-#            self.swift.set_speed_factor(0.0005)
         self.swift.set_mode(0)
         self.swift.reset(wait=True, speed=500)
 
@@ -226,8 +218,6 @@ class Robot(threading.Thread):
         if Yp > Y:
             sol = "b"
             Yp = (_B - _D) / _A
-#        print("targetting sol {} y = {}, diff = {}, conveyor_speed = {} expected time from timestamp {} time since timestamp {}".format(sol, Yp, Y - Yp, self.conveyor_speed, (Y - Yp) / self.conveyor_speed, T / 1000000000.0))
-#        print("_Sb {}  _R {}  _A {}  _B0 {}  _B1 {}  _B {} _C {} _D {}".format(_Sb, _R, _A, _B0, _B1, _B, _C, _D))
         return Yp
 
     def run(self):
@@ -237,10 +227,7 @@ class Robot(threading.Thread):
             (best, self.conveyor_speed) = self.fruits.get_best()
 
             if best is not None:
-#                print("best init {} click {} last {} x {} y {}".format(best.first_timestamp, best.clicked, best.timestamp, best.x, best.y))
                 (timestamp, x, y) = best.get_position()
-
-#                print("Sending robot to {} height {}".format((x,y), self.avg_height))
 
                 best.clicked = True
                 robot_start = clock_gettime_ns(time_clock)
@@ -249,20 +236,14 @@ class Robot(threading.Thread):
                 if yt > self.WORLDSEND:
                     self.set_position(cmd='G0', x=xt, y=yt, z=self.avg_height + 5, speed=1000)
                     self.swift.flush_cmd(wait_stop=True)
-#                    time.sleep(0.025)
+                    
                     self.set_position(cmd='G0', x=xt, y=yt, z=self.avg_height - 1, speed=1000)
                     self.swift.flush_cmd(wait_stop=True)
+                    
                     robot_end = clock_gettime_ns(time_clock)
-#                    time.sleep(0.025)
                     self.set_position(cmd='G0', x=xt, y=yt, z=self.avg_height + 5, speed=1000)
-#                    self.swift.flush_cmd(wait_stop=True)
-#                    time.sleep(0.025)
-#                     Enable line below for return to rest position every time
-#                    self.set_position(cmd='G0', x=self.rest_x, y=self.rest_y, z=self.avg_height + 5, speed=1000, wait=True)
-#                    time.sleep(0.025)
                     self.swift.flush_cmd(wait_stop=True)
-#                    (x, y, z) = self.swift.get_position()
-#                    print('Position x: {} y: {} z: {}'.format(x, y ,z))
+                    
                     start_delay = (robot_start - timestamp) / 1000000.0
                     move_time = (robot_end - robot_start) / 1000000.0
                     distance = sqrt((xt - x0)**2 + (yt - y0)**2)
@@ -278,9 +259,6 @@ class Robot(threading.Thread):
                     # Disable 2 lines below for return to rest position every time
                     x0 = xt
                     y0 = yt
-
-#                    print("robot start delay = {:3.1f} ms  movement time = {:3.1f} ms error = {:3.1f} distance {:3.1f} mm a {} b {}".format(
-#                        start_delay, move_time, start_delay+move_time - abs(yt - y)*1000.0/self.conveyor_speed, distance, self.a, self.b))
 
             else:
                 self.set_position(cmd='G0', x=self.rest_x, y=self.rest_y, z=self.avg_height + 5, speed=1000, wait=True)
@@ -337,11 +315,9 @@ class Fruits(object):
                         fruit_speed = abs(self.db[idx].first_y - centers[new_idx][1])*1000000000.0 / duration
                         if fruit_speed > 1: # Ignore static objects (GUI, robot arm, etc)
                             speeds.append(fruit_speed)
-#                        print("init center {} time {} last center {} time{}".format(self.db[idx][5], self.db[idx][4], centers[new_idx][1], timestamp))
                         self.db[idx].update(timestamp, scores[new_idx], centers[new_idx][0], centers[new_idx][1])
 
                 if len(speeds) != 0:
-#                    print("speeds: {}".format(speeds))
                     new_speed = np.mean(speeds)
                     self.speed = SPEED_DECAY_RATE*new_speed + (1-SPEED_DECAY_RATE)*self.speed
 
@@ -350,13 +326,6 @@ class Fruits(object):
                     self.db.append(Fruit(timestamp, scores[idx], centers[idx][0], centers[idx][1]))
 
                 self.db = [fruit for fruit in self.db if (((timestamp - fruit.timestamp)*self.speed/1000000000.0) < (100 + fruit.y))]
-
-#            print("self.db: {}".format(self.db))
-#            exits = [fruit.score for fruit in self.db if (((timestamp - fruit.timestamp)*self.speed/1000000000.0) > (100 + fruit.y))]
-#            if len(exits) != 0:
-#                print("scores: {}".format(exits))
-#            print("Speed: {}".format(self.speed))
-
 
 def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -367,7 +336,7 @@ def main():
 
     labels = load_labels(args.labels)
 
-    ext_delegate = [ tflite.load_delegate("/usr/lib/libvx_delegate.so")  ]
+    ext_delegate = [ tflite.load_delegate("/usr/lib/libethosu_delegate.so")  ]
     interpreter = tflite.Interpreter(model_path=args.model, experimental_delegates=ext_delegate)
     interpreter.allocate_tensors()
 
@@ -381,9 +350,8 @@ def main():
     print("width: {}, height: {}".format(input_width, input_height))
 
     capture = cv2.VideoCapture(
-        'v4l2src device=/dev/video2 do_timestamp=true ! queue max-size-time=30000 max_size-buffers=1 leaky=2 ! video/x-raw,format=YUY2,width=1920,height=1080 ! imxvideoconvert_g2d  rotation=1 ! video/x-raw,format=BGRx,width=360,height=640 ! videoconvert ! video/x-raw,format=BGR ! videocrop top=140 bottom=140 ! appsink drop=true max-buffers=1',
+        'v4l2src device=/dev/video0 do_timestamp=true ! queue max-size-time=30000 max_size-buffers=1 leaky=2 ! video/x-raw,format=YUY2,width=1920,height=1080 ! imxvideoconvert_pxp  rotation=1 ! video/x-raw,format=BGR,width=360,height=640 ! videocrop top=140 bottom=140 ! appsink drop=true max-buffers=1',
         cv2.CAP_GSTREAMER)
-#    capture = cv2.VideoCapture('v4l2src device=/dev/video0 ! videoconvert ! video/x-raw,format=BGR,width=1920,height=1080 ! videoscale ! video/x-raw,format=BGR,width=480,height=270 ! appsink drop=true', cv2.CAP_GSTREAMER)
     cv2.namedWindow("video")
 
     fruits = Fruits()
@@ -391,7 +359,6 @@ def main():
     pts_file = open("/home/root/machine-inspection/pts_file", "r")
     pts = pts_file.readline()
 
-#    robot = Robot(fruits, filters={'hwid': 'USB VID:PID=2341:0042'})
     robot = Robot(fruits, port=pts)
     robot.start()
 
@@ -406,7 +373,6 @@ def main():
     fps = 30
     fps_previous = 0
 
-    # DEBUG
     # Those values will be overridden if calibration if performed
     h = np.asarray([[-4.89377060e-01, 1.16771756e-01, 2.94950387e+02],
                     [8.80741774e-03, 4.69708977e-01, -4.74280218e+01],
@@ -421,11 +387,10 @@ def main():
 
         before = clock_gettime_ns(time_clock)
         image = Image.fromarray(cv2.cvtColor(cv2_im, cv2.COLOR_BGR2RGB))
-#        image = Image.fromarray(cv2_im)
         after = clock_gettime_ns(time_clock)
 
         image = image.convert('RGB').resize((input_width, input_height), Image.ANTIALIAS)
-#        image = image.resize((input_width, input_height), Image.ANTIALIAS)
+
         # Run inference
         start = clock_gettime_ns(time_clock)
         results = detect_objects(interpreter, image, args.threshold)
@@ -436,7 +401,6 @@ def main():
         if len(results) != 0:
             label_id = int(results[0]['class_id'] + 1)
             prob = round(results[0]['score'] * 100)
-#            print("Label: {}".format(labels[label_id]))
         if label_id < 89 and label_id > 0:
             top_class = labels[label_id]
 
@@ -444,7 +408,6 @@ def main():
         fps_previous = fps_current
         inference_time = (end - start) / 1000000.0
 
-#        print("Press key...\r\n")
         key = cv2.waitKey(1)
         if key != -1:
             print("Pressed: {}".format(key))
@@ -462,7 +425,6 @@ def main():
         elif key == ord('v'):
             state = STATE_VALIDATE
 
-#        print("Current state: {}".format(state))
         if state == STATE_CALIB:
             if previous_state ==  STATE_PLAY:
                 robot.pause()
@@ -550,25 +512,23 @@ def main():
             for result in results:
                 class_name = labels[int(result['class_id'] + 1)]
                 (x0, y0, x1, y1) = compute_loc(result['bounding_box'], width, height)
+                
                 if (abs((x0 - x1) * (y0 - y1)) < 40000): # Filter out full picture matches
-#                    centers.append([(x0 + x1) / 2, (y0 + y1) / 2])
                     score = result['score']
                     class_prob = round(score * 100)
                     cv2.putText(cv2_im, "{} {}".format(class_name, class_prob), (x0, y0 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.4, CV2_BLACK, 1)
+                
                     if class_name == "apple":
-#                        centers.append([(x0 + x1) / 2, (y0 + y1) / 2])
                         centers.append([float(x0), float(y0)])
                         centers.append([float(x1), float(y1)])
                         scores.append(1.0)
                         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), CV2_GREEN)
                     elif class_name == "orange": # apples are pretty much never detected as oranges, so give those a big negative bias
-#                        centers.append([(x0 + x1) / 2, (y0 + y1) / 2])
                         centers.append([float(x0), float(y0)])
                         centers.append([float(x1), float(y1)])
                         scores.append(-128)
                         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), CV2_RED)
                     else:
-#                        scores.append(0*score)
                         cv2_im = cv2.rectangle(cv2_im, (x0, y0), (x1, y1), CV2_BLUE)
 
             cv2.putText(cv2_im, "{:2.0f} fps   inference {:3.1f} ms  {:3.1f} {:3.1f} {}".format(
@@ -581,8 +541,6 @@ def main():
                 centers =  centers.reshape(-1, 2, 2)
                 # We target a bit in front of the center, to account for the web app reaction time
                 centers = [ [(x0 + x1) / 2, (y0 + y1) / 2 - abs(y0 -y1)/4]  for [[x0,y0], [x1,y1]] in centers]
-#                print("scores: {}".format(scores))
-#                print("centers: {}".format(centers))
                 fruits.update_db(fps_current, scores, centers)
 
         cv2.imshow("video", cv2_im)

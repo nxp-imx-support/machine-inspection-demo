@@ -1,6 +1,6 @@
 SUMMARY = "Machine Inspection demo"
 
-LICENSE = "NXP-Binary-EULA & GPLv2 & BSD-3-Clause & Apache-2.0"
+LICENSE = "NXP-Binary-EULA & GPL-2.0-only & BSD-3-Clause & Apache-2.0"
 LIC_FILES_CHKSUM = "file://${WORKDIR}/machine-inspection-demo/EULA.txt;md5=2acb50e7549e3925e6982a7920c26fd8"
 
 SRC_URI = " \
@@ -16,6 +16,6 @@ do_install() {
     cp -r ${WORKDIR}/machine-inspection-demo/* ${D}/home/root/machine-inspection/machine-inspection-demo/
 }
 
-FILES_${PN} = " \
+FILES:${PN} = " \
     /home/root/machine-inspection/machine-inspection-demo/* \
 "

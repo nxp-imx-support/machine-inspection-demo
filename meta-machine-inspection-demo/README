@@ -1,0 +1,3 @@
+# Machine Inspection Yocto Layer
+
+This repository contains the Yocto meta-layer for the machine-inspection demo on the i.MX93.

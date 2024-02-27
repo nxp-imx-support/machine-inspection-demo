@@ -38,7 +38,7 @@ The following section describes the build process,
 ```
  - First, clone this repo to the machine-inspection-demo folder.
 
- - Then, we need to initialize the Yocto build based on the Real Time Edge v2.2 Yocto release:
+ - Then, we need to initialize the Yocto build based on the Real Time Edge v2.7 Yocto release:
 ```
  mkdir yocto-real-time-edge
  cd yocto-real-time-edge

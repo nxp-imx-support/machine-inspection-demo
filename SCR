@@ -76,7 +76,7 @@ Package Category:                Graphics
 Type of Content:                 source
 Description and comments:        i.MX OpenCV
 Release Location:                https://github.com/nxp-imx/opencv-imx -b lf-6.1.36-2.1.0
-Origin:                          NXP (BSD-3-Cluse)
+Origin:                          NXP (BSD-3-Clause)
                                  OpenCV Foundation (BSD-3-Clause) - https://github.com/opencv/opencv
                                  Intel Corporation  (BSD-3-Clause)
                                  Willow Garage Inc.  (BSD-3-Clause)
